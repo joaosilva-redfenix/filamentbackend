@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GroupResource\Pages;
-use App\Filament\Resources\GroupResource\RelationManagers;
+use App\Filament\Resources\EquipmentResource\Pages;
+use App\Filament\Resources\EquipmentResource\RelationManagers;
+use App\Models\Equipment;
 use App\Models\Group;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -15,10 +16,9 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-
-class GroupResource extends Resource
+class EquipmentResource extends Resource
 {
-    protected static ?string $model = Group::class;
+    protected static ?string $model = Equipment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -26,7 +26,7 @@ class GroupResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required() 
+                TextInput::make('name')->required()
             ]);
     }
 
@@ -36,6 +36,9 @@ class GroupResource extends Resource
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('consumption')
+                    ->placeholder('not set')
             ])
             ->filters([
                 //
@@ -58,9 +61,9 @@ class GroupResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGroups::route('/'),
-            'create' => Pages\CreateGroup::route('/create'),
-            'edit' => Pages\EditGroup::route('/{record}/edit'),
+            'index' => Pages\ListEquipment::route('/'),
+            'create' => Pages\CreateEquipment::route('/create'),
+            'edit' => Pages\EditEquipment::route('/{record}/edit'),
         ];
     }    
 }
