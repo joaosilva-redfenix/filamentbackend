@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class equipment extends Model
+class Equipment extends Model
 {
     use HasFactory;
 
@@ -13,6 +13,11 @@ class equipment extends Model
 
     public function group()
     {
-        return $this->belongsTo(group::class);
+        return $this->belongsTo(Group::class);
+    }
+
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class);
     }
 }

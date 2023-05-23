@@ -5,17 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EquipmentResource\Pages;
 use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Models\Equipment;
-use App\Models\Group;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Auth;
 
 class EquipmentResource extends Resource
 {
@@ -27,27 +23,15 @@ class EquipmentResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()
+                //
             ]);
     }
-
-    public static function getEloquentQuery(): Builder
-{
-    $groupId = Auth::user()->group_id;
-
-    return static::getModel()::query()->where('group_id', $groupId);
-}
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                // TextColumn::make('id'),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('consumption')
-                    ->sortable()
-                    ->placeholder('not set')
+                //
             ])
             ->filters([
                 //
