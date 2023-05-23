@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class EquipmentResource extends Resource
 {
@@ -30,14 +31,22 @@ class EquipmentResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+{
+    $groupId = Auth::user()->group_id;
+
+    return static::getModel()::query()->where('group_id', $groupId);
+}
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
+                // TextColumn::make('id'),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('consumption')
+                    ->sortable()
                     ->placeholder('not set')
             ])
             ->filters([
