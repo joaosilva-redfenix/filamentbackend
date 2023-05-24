@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipments', function (Blueprint $table) {
+        Schema::create('devices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('group_id')->nullable();
+            $table->unsignedBigInteger('facility_id')->nullable();
             $table->string('name');
             $table->decimal('consumption')->nullable();
             $table->timestamps();
 
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+            $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
         });
     }
 
@@ -26,7 +28,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
-        Schema::dropIfExists('equipments');
+    {   
+        Schema::dropIfExists('devices');
     }
 };

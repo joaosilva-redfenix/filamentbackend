@@ -2,39 +2,43 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EquipmentResource\Pages;
-use App\Filament\Resources\EquipmentResource\RelationManagers;
-use App\Models\Equipment;
+use App\Filament\Resources\DeviceResource\Pages;
+use App\Filament\Resources\DeviceResource\RelationManagers;
+use App\Models\Device;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class EquipmentResource extends Resource
+class DeviceResource extends Resource
 {
-    protected static ?string $model = Equipment::class;
+    protected static ?string $model = Device::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                TextInput::make('name')->required()
-            ]);
-    }
-    
     public static function getEloquentQuery(): Builder
     {
         $groupId = Auth::user()->group_id;
 
         return static::getModel()::query()->where('group_id', $groupId);
+    }
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('consumption'),
+                Forms\Components\Select::make('facility_id')
+                    ->relationship('facility', 'name')
+
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -45,7 +49,10 @@ class EquipmentResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('consumption')
                     ->sortable()
-                    ->placeholder('not set')
+                    ->placeholder('not set'),
+                Tables\Columns\TextColumn::make('facility_id'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime(),
             ])
             ->filters([
                 //
@@ -68,9 +75,9 @@ class EquipmentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEquipment::route('/'),
-            'create' => Pages\CreateEquipment::route('/create'),
-            'edit' => Pages\EditEquipment::route('/{record}/edit'),
+            'index' => Pages\ListDevices::route('/'),
+            'create' => Pages\CreateDevice::route('/create'),
+            'edit' => Pages\EditDevice::route('/{record}/edit'),
         ];
     }    
 }

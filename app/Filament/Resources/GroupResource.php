@@ -64,5 +64,5 @@ class GroupResource extends Resource
             'create' => Pages\CreateGroup::route('/create'),
             'edit' => Pages\EditGroup::route('/{record}/edit'),
         ];
-    }    
+    }
 }
