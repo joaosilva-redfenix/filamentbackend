@@ -9,7 +9,13 @@ class Equipment extends Model
 {
     use HasFactory;
 
+    protected $table = 'equipments';
+
     protected $fillable = ['name'];
+
+    protected function bla(){
+        return 'tiahsd';
+    }
 
     public function group()
     {
