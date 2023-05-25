@@ -24,7 +24,7 @@ class DeviceResource extends Resource
     {
         $groupId = Auth::user()->group_id;
 
-        return static::getModel()::query()->where('group_id', $groupId);
+        return static::getModel()::query()->where('group_id', $groupId)->with('facility');
     }
 
     public static function form(Form $form): Form
@@ -36,7 +36,7 @@ class DeviceResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('consumption'),
                 Forms\Components\Select::make('facility_id')
-                    ->relationship('facility', 'name')
+                    ->relationship('facility', 'name', fn (Builder $query) => $query->where('group_id', Auth::user()->group_id))
 
             ]);
     }
@@ -50,9 +50,9 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('consumption')
                     ->sortable()
                     ->placeholder('not set'),
-                Tables\Columns\TextColumn::make('facility_id'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                Tables\Columns\TextColumn::make('facility.name'),
+                // Tables\Columns\TextColumn::make('created_at')
+                //     ->dateTime(),
             ])
             ->filters([
                 //
