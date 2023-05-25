@@ -13,7 +13,8 @@ class DevicesFacilities extends Widget
 
     public static function canView(): bool
 {
-    return true;
+    $user = auth()->user();
+    return $user && $user->group_id !== null;
 }
     protected static string $view = 'filament.widgets.devicefacilities';
 }
