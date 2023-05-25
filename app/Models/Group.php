@@ -16,13 +16,13 @@ class Group extends Model
         return $this->hasMany(User::class);
     }
 
-    public function equipments()
+    public function devices()
     {
-        return $this->hasMany(Equipment::class);
+        return $this->hasMany(Device::class);
     }
 
     public function facilities()
     {
-        return $this->belongsToMany(Facility::class);
+        return $this->hasMany(Facility::class);
     }
 }
