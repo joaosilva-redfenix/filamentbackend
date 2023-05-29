@@ -13,7 +13,6 @@ class DevicePolicy
      */
     public function viewAny(User $user): bool
     {
-        $user = auth()->user();
         return $user && $user->group_id !== null;
     }
 

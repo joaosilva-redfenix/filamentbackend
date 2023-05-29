@@ -11,6 +11,9 @@ class CreateDevice extends CreateRecord
 {
     protected static string $resource = DeviceResource::class;
 
+    // gets rid of the create & create another button
+    protected static bool $canCreateAnother = false;
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['group_id'] = Filament::auth()->user()->group_id;
