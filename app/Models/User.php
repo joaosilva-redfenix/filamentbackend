@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_owner',
     ];
 
     /**
@@ -41,6 +42,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_owner' => 'boolean',
+        'is_admin' => 'boolean',
     ];
 
     public function group()

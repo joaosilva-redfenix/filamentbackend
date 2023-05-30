@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 
+use Filament\Forms\Components\Toggle;
+
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
@@ -43,14 +45,12 @@ class UserResource extends Resource
                     ->label(static fn(Page $livewire): string => ($livewire instanceof EditUser) ? 'New Password' : 'Password',),
                 Forms\Components\Select::make('group_id')
                     ->relationship('group', 'name'),
-            
-                
-            // add space here 
-            
-                // Forms\Components\Toggle::make('is_owner')
-                //     ->label('Owner')
-                //     ->required(),
-                
+                Toggle::make('is_owner')
+                    ->label('Owner')
+                    ->onIcon('heroicon-s-user')
+                    ->offIcon('heroicon-s-user')
+                    ->onColor('success')
+                    ->offColor('danger'),
             ]);
     }
 
@@ -60,6 +60,11 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('is_owner')
+                    ->boolean()
+                    ->trueColor('success')
+                    ->falseColor('warning')
+                    ->label('Owner'),
                 Tables\Columns\TextColumn::make('Group.name')
                     ->placeholder(''),
             ])

@@ -47,7 +47,7 @@ class UsersRelationManager extends RelationManager
                     ->preloadRecordSelect(),
             ])  
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DissociateAction::make(),
                 // Tables\Actions\DeleteAction::make(),
             ])
