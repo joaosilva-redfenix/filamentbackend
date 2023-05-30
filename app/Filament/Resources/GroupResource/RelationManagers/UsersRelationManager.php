@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\GroupResource\RelationManagers;
 
+use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -41,9 +42,10 @@ class UsersRelationManager extends RelationManager
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
                 Tables\Actions\AssociateAction::make()
+                    ->recordSelectOptionsQuery(fn ($query) => $query->where('group_id', null))
                     ->disableAssociateAnother()
                     ->preloadRecordSelect(),
-            ])
+            ])  
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DissociateAction::make(),
