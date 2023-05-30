@@ -10,6 +10,8 @@ class CreateGroup extends CreateRecord
 {
     protected static string $resource = GroupResource::class;
 
+    protected static bool $canCreateAnother = false;
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
