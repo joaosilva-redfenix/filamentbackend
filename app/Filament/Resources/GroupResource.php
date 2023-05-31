@@ -20,10 +20,9 @@ use Illuminate\Support\Facades\Auth;
 class GroupResource extends Resource
 {
     protected static ?string $model = Group::class;
-
     
-    protected static ?string $navigationIcon = 'heroicon-o-office-building';
-
+    protected static ?string $navigationIcon = 'heroicon-o-cloud';
+    
     // public static function getEloquentQuery(): Builder
     // {
     //     return static::getModel()::query()->with('User');

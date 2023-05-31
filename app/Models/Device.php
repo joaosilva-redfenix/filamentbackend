@@ -14,7 +14,7 @@ class Device extends Model
     protected $fillable = [
         'name',
         'consumption',
-        'group_id'
+        'group_id',
     ];
 
     public function group()
@@ -30,6 +30,7 @@ class Device extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('owned', function (Builder $builder) {
+            if(app()->runningInConsole()) return;
             if(!auth()->user()->is_admin){
                 $builder->where('group_id', auth()->user()->group->id);
             }   

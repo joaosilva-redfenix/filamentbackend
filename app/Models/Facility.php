@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,17 +12,28 @@ class Facility extends Model
 
     protected $fillable = [
         'name',
-        'location'
+        'location',
+        'group_id',
     ];
   
 
-    public function equipments()
+    public function devices()
     {
-        return $this->hasMany(Equipment::class);
+        return $this->hasMany(Device::class);
     }
 
-    public function groups()
+    public function group()
     {
-        return $this->belongsToMany(Group::class);
+        return $this->belongsTo(Group::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('owned', function (Builder $builder) {
+            if(app()->runningInConsole()) return;
+            if(!auth()->user()->is_admin){
+                $builder->where('group_id', auth()->user()->group->id);
+            }   
+        });
     }
 }
