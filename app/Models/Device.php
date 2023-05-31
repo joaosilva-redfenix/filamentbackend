@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class Device extends Model
 {
@@ -24,4 +26,14 @@ class Device extends Model
     {
         return $this->belongsTo(Facility::class);
     }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('owned', function (Builder $builder) {
+            if(!auth()->user()->is_admin){
+                $builder->where('group_id', auth()->user()->group->id);
+            }   
+        });
+    }
+
 }

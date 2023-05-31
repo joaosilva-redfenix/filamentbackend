@@ -13,16 +13,17 @@ class GroupPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->is_admin ?? false;
+        return true;
     }
 
-    // /**
-    //  * Determine whether the user can view the model.
-    //  */
-    // public function view(User $user, Group $group): bool
-    // {
-    //     //
-    // }
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Group $group): bool
+    {
+        
+        return $user->group_id == $group->id || $user->is_admin;
+    }
 
     // /**
     //  * Determine whether the user can create models.
@@ -32,21 +33,21 @@ class GroupPolicy
     //     //
     // }
 
-    // /**
-    //  * Determine whether the user can update the model.
-    //  */
-    // public function update(User $user, Group $group): bool
-    // {
-    //     //
-    // }
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Group $group): bool
+    {
+        return ($user->group_id == $group->id && $user->is_owner) || $user->is_admin;
+    }
 
-    // /**
-    //  * Determine whether the user can delete the model.
-    //  */
-    // public function delete(User $user, Group $group): bool
-    // {
-    //     //
-    // }
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Group $group): bool
+    {
+        return $user->is_admin;
+    }
 
     // /**
     //  * Determine whether the user can restore the model.

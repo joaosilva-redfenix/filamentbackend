@@ -15,19 +15,25 @@ use Filament\Tables;
 use Filament\Tables\TablesServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Illuminate\Support\Facades\Auth;
 
 class GroupResource extends Resource
 {
     protected static ?string $model = Group::class;
 
-    protected static ?string $navigationGroup = 'POWERFULL';
-    // protected static ?string $navigationLabel = 'Mis Clientes';
+    
     protected static ?string $navigationIcon = 'heroicon-o-office-building';
 
     // public static function getEloquentQuery(): Builder
     // {
     //     return static::getModel()::query()->with('User');
+    // }
+    // protected static function getNavigationGroup(): ?string
+    // {
+    //     $groupId = Auth::user()->group_id;
+    //     $group = Group::where('id', $groupId)->first();
+    //     $groupName = $group->name;
+    //     return $groupName;
     // }
 
     public static function form(Form $form): Form

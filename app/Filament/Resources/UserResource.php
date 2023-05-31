@@ -23,7 +23,7 @@ use Filament\Forms\Components\Toggle;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $navigationGroup = 'POWERFULL';
+    protected static ?string $navigationGroup = "POWERFULL";
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
@@ -63,7 +63,7 @@ class UserResource extends Resource
                 Tables\Columns\IconColumn::make('is_owner')
                     ->boolean()
                     ->trueColor('success')
-                    ->falseColor('warning')
+                    ->falseColor('danger')
                     ->label('Owner'),
                 Tables\Columns\TextColumn::make('Group.name')
                     ->placeholder(''),

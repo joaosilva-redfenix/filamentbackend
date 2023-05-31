@@ -12,16 +12,16 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->is_admin ?? false;
+        return true;
     }
 
-    // /**
-    //  * Determine whether the user can view the model.
-    //  */
-    // public function view(User $user, User $model): bool
-    // {
-    //     //
-    // }
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, User $model): bool
+    {
+        return $user->id == $model->id || ($user->is_owner && $model->group->id == $user->group->id) || $user->is_admin;
+    }
 
     // /**
     //  * Determine whether the user can create models.
@@ -31,13 +31,13 @@ class UserPolicy
     //     //
     // }
 
-    // /**
-    //  * Determine whether the user can update the model.
-    //  */
-    // public function update(User $user, User $model): bool
-    // {
-    //     //
-    // }
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, User $model): bool
+    {
+        return $user->id == $model->id || ($user->is_owner && $model->group->id == $user->group->id) || $user->is_admin;
+    }
 
     // /**
     //  * Determine whether the user can delete the model.

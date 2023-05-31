@@ -22,9 +22,7 @@ class DeviceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $groupId = Auth::user()->group_id;
-
-        return static::getModel()::query()->where('group_id', $groupId)->with('facility');
+        return static::getModel()::query()->with('facility');
     }
 
     public static function form(Form $form): Form
