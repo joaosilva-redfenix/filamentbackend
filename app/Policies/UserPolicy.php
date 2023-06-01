@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->id == $model->id || ($user->is_owner && $model->group->id == $user->group->id) || $user->is_admin;
+        return ($user->is_owner || $user->is_admin);
     }
 
     // /**

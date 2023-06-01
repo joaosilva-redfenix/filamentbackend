@@ -15,6 +15,7 @@ use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Exists;
 
 class FilamentServiceProvider extends ServiceProvider
 {
@@ -46,7 +47,7 @@ class FilamentServiceProvider extends ServiceProvider
                 $items [] = $item;
             }
 
-            if (auth()->user()->is_owner){
+            if (auth()->user()->is_owner && isset(auth()->user()->group)){
                 $itemsOwner [] = NavigationItem::make('Group Manager')
                     ->icon('heroicon-o-scale')
                     ->isActiveWhen(fn (): bool => request()->routeIs('filament.resources.groups.edit'))
@@ -63,7 +64,7 @@ class FilamentServiceProvider extends ServiceProvider
                 }
             }
 
-            if(auth()->user()->is_owner){
+            if(auth()->user()->is_owner && isset(auth()->user()->group)){
                 foreach (FacilityResource::getNavigationItems() as $item){
                     $itemsOwner [] = $item;
                 }
@@ -83,9 +84,11 @@ class FilamentServiceProvider extends ServiceProvider
             
             $groups = [];
 
+            if (isset(auth()->user()->group)) {
             $groups []= NavigationGroup::make('home')->items($items);
-
-            if(auth()->user()->is_owner){
+            }
+            
+            if(auth()->user()->is_owner && !empty($groups)){
                 $groups []= NavigationGroup::make(auth()->user()->group->name)->items($itemsOwner);
             }
 
