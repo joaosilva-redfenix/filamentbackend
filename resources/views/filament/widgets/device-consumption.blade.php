@@ -2,22 +2,19 @@
     <x-filament::card>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <?php
-        // Step 1: Retrieve devices based on the user's group_id
+        
         $devices = DB::table('devices')
             ->where('group_id', auth()->user()->group_id)
             ->get();
         
-        // Step 2: Group devices by consumption and count the number of devices
         $deviceCounts = $devices->groupBy('consumption')->map->count();
         
-        // Step 3: Prepare data for the column chart
         $consumptions = $deviceCounts->keys()->map(function ($consumption) {
             return "Consumption " . $consumption;
         });
         $counts = $deviceCounts->values();
         ?>
         
-        <!-- Step 4: Render the column chart -->
         <div>
             <canvas id="devicesChart2"></canvas>
         </div>

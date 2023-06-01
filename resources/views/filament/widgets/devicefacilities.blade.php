@@ -1,16 +1,14 @@
 <x-filament::widget>
     <x-filament::card>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
         <?php
-        // Step 1: Retrieve devices based on the user's group_id
         $devices = DB::table('devices')
             ->where('group_id', auth()->user()->group_id)
             ->get();
         
-        // Step 2: Group devices by facility_id and count the number of devices
         $deviceCounts = $devices->groupBy('facility_id')->map->count();
         
-        // Step 3: Join facilities table to retrieve facility names
         $deviceCounts = $deviceCounts->mapWithKeys(function ($count, $facilityId) {
             $facilityName = DB::table('facilities')
                 ->where('id', $facilityId)
@@ -20,7 +18,6 @@
         });
         ?>
         
-        <!-- Step 4: Render the pie chart -->
         <div>
             <canvas id="devicesChart"></canvas>
         </div>
@@ -34,18 +31,23 @@
                     datasets: [{
                         data: {!! json_encode($deviceCounts->values()) !!},
                         backgroundColor: [
-                            '#FF6384',
-                            '#36A2EB',
-                            '#FFCE56',
-                            // Add more colors if needed
+                            '#003f5c',
+                            '#2f4b7c',
+                            '#665191',
+                            '#a05195',
+                            '#d45087',
+                            '#f95d6a',
+                            '#ff7c43',
+                            '#ffa600',
+                            '#ffdc00',
+                            '#a2c8ab',
                         ]
                     }]
                 },
                 options: {
-                    // Customize chart options as per your requirements
+  
                 }
             });
         </script>
-        
     </x-filament::card>
 </x-filament::widget>
