@@ -26,18 +26,25 @@ class DeviceResource extends Resource
     }
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('consumption'),
-                Forms\Components\Select::make('facility_id')
-                    ->relationship('facility', 'name', fn (Builder $query) => $query->where('group_id', Auth::user()->group_id))
+{
+    
+    $form->schema([
+        Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+        Forms\Components\TextInput::make('consumption'),
+        Forms\Components\Select::make('facility_id')
+            ->relationship('facility', 'name', function (Builder $query) {
+                if (!Auth::user()->is_admin) {
+                    return $query->where('group_id', Auth::user()->group_id);
+                } else {
+                    return $query;
+                }
+            })
+    ]);
 
-            ]);
-    }
+    return $form;
+}
 
     public static function table(Table $table): Table
     {
@@ -48,7 +55,8 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('consumption')
                     ->sortable()
                     ->placeholder('not set'),
-                Tables\Columns\TextColumn::make('facility.name'),
+                Tables\Columns\TextColumn::make('facility.name')
+                    ->searchable(),
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->dateTime(),
             ])
@@ -56,10 +64,13 @@ class DeviceResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\DeleteAction::make(),
+                    // ->hidden(!auth()->user()->is_admin),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->hidden((!auth()->user()->is_admin) || (!auth()->user()->is_owner)),
             ]);
     }
     

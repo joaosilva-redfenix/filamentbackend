@@ -13,7 +13,7 @@ class DevicePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user && $user->group_id !== null;
+        return $user && $user->group_id !== null || $user->is_admin;
     }
 
 //     /**
@@ -40,13 +40,13 @@ class DevicePolicy
 //         //
 //     }
 
-//     /**
-//      * Determine whether the user can delete the model.
-//      */
-//     public function delete(User $user, Device $device): bool
-//     {
-//         //
-//     }
+    /**
+     * Determine whether the user can delete the model.
+     */
+    // public function delete(User $user, Device $device): bool
+    // {
+    //     return auth()->user()->is_admin; // add owner too here
+    // }
 
 //     /**
 //      * Determine whether the user can restore the model.

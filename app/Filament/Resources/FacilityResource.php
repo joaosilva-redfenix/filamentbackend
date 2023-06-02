@@ -21,7 +21,7 @@ class FacilityResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query()->with('group');
+        return static::getModel()::query()->with('group', 'device');
     }
 
     public static function form(Form $form): Form
@@ -34,6 +34,9 @@ class FacilityResource extends Resource
                 Forms\Components\TextInput::make('location')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('group_id')
+                    ->relationship('group', 'name')
+                    ->hidden(!auth()->user()->is_admin),
             ]);
     }
 
@@ -45,6 +48,9 @@ class FacilityResource extends Resource
                 Tables\Columns\TextColumn::make('location'),
                 Tables\Columns\TextColumn::make('group.name')
                     ->hidden(!auth()->user()->is_admin),
+                Tables\Columns\TextColumn::make('device_count')
+                    ->counts('device')
+                    ->label('Devices'),
             ])
             ->filters([
                 //
@@ -53,7 +59,7 @@ class FacilityResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
     

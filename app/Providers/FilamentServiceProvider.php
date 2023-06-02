@@ -84,11 +84,11 @@ class FilamentServiceProvider extends ServiceProvider
             
             $groups = [];
 
-            if (isset(auth()->user()->group)) {
+            if (isset(auth()->user()->group) || (auth()->user()->is_admin)) {
             $groups []= NavigationGroup::make('home')->items($items);
             }
             
-            if(auth()->user()->is_owner && !empty($groups)){
+            if(auth()->user()->is_owner && (!auth()->user()->is_admin) && !empty($groups)){
                 $groups []= NavigationGroup::make(auth()->user()->group->name)->items($itemsOwner);
             }
 

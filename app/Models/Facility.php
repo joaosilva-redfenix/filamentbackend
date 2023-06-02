@@ -17,7 +17,7 @@ class Facility extends Model
     ];
   
 
-    public function devices()
+    public function device()
     {
         return $this->hasMany(Device::class);
     }
