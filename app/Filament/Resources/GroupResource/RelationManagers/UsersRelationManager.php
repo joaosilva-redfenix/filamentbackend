@@ -13,6 +13,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsersRelationManager extends RelationManager
@@ -22,8 +23,13 @@ class UsersRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    
+    public static function getEloquentQuery(): Builder
+    {
+        $authenticatedUserId = auth()->user()->id;
 
+        return User::query()->whereNotIn('id', [$authenticatedUserId]);
+    }
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -74,7 +80,8 @@ class UsersRelationManager extends RelationManager
                     ->hidden(auth()->user()->is_admin),
                 Tables\Actions\DissociateAction::make()
                     ->hidden(!auth()->user()->is_admin),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ->hidden(fn ($record) => $record->id === auth()->id())
             ])
             ->bulkActions([
                 Tables\Actions\DissociateBulkAction::make(),
