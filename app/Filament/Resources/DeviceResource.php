@@ -41,7 +41,8 @@ class DeviceResource extends Resource
             ->required()
             ->options(Group::all()->pluck('name', 'id')->toArray())
             ->reactive()
-            ->afterStateUpdated(fn (callable $set) => $set('facility_id', null)),
+            ->afterStateUpdated(fn (callable $set) => $set('facility_id', null))
+            ->hidden(!auth()->user()->is_admin),
         Forms\Components\Select::make('facility_id')
             ->label('Facility')
             ->options(function (callable $get){
@@ -50,7 +51,8 @@ class DeviceResource extends Resource
                     return Facility::all()->pluck('name', 'id');
                 }
                 return $group->facilities->pluck('name', 'id');
-            }),
+            })
+            ->hidden(!auth()->user()->is_admin),
         Forms\Components\Select::make('facility_id')
             ->relationship('facility', 'name', function (Builder $query) {
                 return $query->where('group_id', Auth::user()->group_id);
