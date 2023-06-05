@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeviceResource\Pages;
 use App\Filament\Resources\DeviceResource\RelationManagers;
 use App\Models\Device;
+use App\Models\Facility;
+use App\Models\Group;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -22,7 +25,7 @@ class DeviceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query()->with('facility');
+        return static::getModel()::query()->with('group', 'facility');
     }
 
     public static function form(Form $form): Form
@@ -33,14 +36,26 @@ class DeviceResource extends Resource
                 ->required()
                 ->maxLength(255),
         Forms\Components\TextInput::make('consumption'),
+        Forms\Components\Select::make('group_id')
+            ->label('Group')
+            ->required()
+            ->options(Group::all()->pluck('name', 'id')->toArray())
+            ->reactive()
+            ->afterStateUpdated(fn (callable $set) => $set('facility_id', null)),
+        Forms\Components\Select::make('facility_id')
+            ->label('Facility')
+            ->options(function (callable $get){
+                $group = Group::find($get('group_id'));
+                if(!$group){
+                    return Facility::all()->pluck('name', 'id');
+                }
+                return $group->facilities->pluck('name', 'id');
+            }),
         Forms\Components\Select::make('facility_id')
             ->relationship('facility', 'name', function (Builder $query) {
-                if (!Auth::user()->is_admin) {
-                    return $query->where('group_id', Auth::user()->group_id);
-                } else {
-                    return $query;
-                }
-            })
+                return $query->where('group_id', Auth::user()->group_id);
+            })  
+            ->hidden(auth()->user()->is_admin), 
     ]);
 
     return $form;
