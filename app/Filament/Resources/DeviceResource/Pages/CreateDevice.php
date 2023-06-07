@@ -16,9 +16,14 @@ class CreateDevice extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        if(!auth()->user()->is_admin){
         $data['group_id'] = Filament::auth()->user()->group_id;
      
         return $data;
+        }
+        else{
+        return $data;
+        }
     }
 
     protected function getRedirectUrl(): string
